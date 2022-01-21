@@ -8,15 +8,13 @@ FROM ubuntu:18.04
 ARG FILAMENT_URL=https://github.com/isl-org/filament/archive/fcd2930eb75924bbb7afbe990de9782af4b5d1dc.tar.gz
 ARG CMAKE_URL=https://github.com/Kitware/CMake/releases/download/v3.22.1/cmake-3.22.1-linux-x86_64.tar.gz
 
+# Basic deps
 RUN apt-get update && apt-get install -y \
     wget \
+    build-essential \
  && rm -rf /var/lib/apt/lists/*
 
-RUN wget -O cmake.tar.gz -q ${CMAKE_URL} \
- && mkdir cmake \
- && tar -zxf cmake.tar.gz -C cmake --strip-components=1
-ENV PATH=/cmake/bin:${PATH}
-
+# Filament deps
 RUN apt-get update && apt-get install -y \
     clang-7  \
     libglu1-mesa-dev \
@@ -26,9 +24,18 @@ RUN apt-get update && apt-get install -y \
     libxi-dev \
  && rm -rf /var/lib/apt/lists/*
 
+RUN wget -O cmake.tar.gz -q ${CMAKE_URL} \
+ && mkdir cmake \
+ && tar -zxf cmake.tar.gz -C cmake --strip-components=1
+ENV PATH=/cmake/bin:${PATH}
+
 RUN wget -O filament.tar.gz -q ${FILAMENT_URL} \
  && mkdir filament \
  && tar -zxf filament.tar.gz -C filament --strip-components=1
+
+RUN apt-get update && apt-get install -y \
+    libegl1-mesa-dev \
+ && rm -rf /var/lib/apt/lists/*
 
 # Build flags shall be consistent with filament_builde.cmake
 WORKDIR /filament
