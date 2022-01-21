@@ -12,12 +12,10 @@ RUN apt-get update && apt-get install -y \
     wget \
  && rm -rf /var/lib/apt/lists/*
 
-RUN wget -O cmake.tar.gz -q ${FILAMENT_URL} \
+RUN wget -O cmake.tar.gz -q ${CMAKE_URL} \
  && mkdir cmake \
  && tar -zxf cmake.tar.gz -C cmake --strip-components=1
 ENV PATH=/cmake/bin:${PATH}
-RUN ls -alh cmake
-RUN cmake --version && which cmake
 
 RUN apt-get update && apt-get install -y \
     clang-7  \
