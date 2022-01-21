@@ -1,0 +1,53 @@
+# ```
+# cd 3rdparty/filament
+# docker build -t open3d-filament:latest -f Dockerfile.filament .
+# ```
+
+FROM ubuntu:18.04
+
+ARG FILAMENT_URL=https://github.com/isl-org/filament/archive/fcd2930eb75924bbb7afbe990de9782af4b5d1dc.tar.gz
+ARG CMAKE_URL=https://github.com/Kitware/CMake/releases/download/v3.22.1/cmake-3.22.1-linux-x86_64.tar.gz
+
+RUN apt-get update && apt-get install -y \
+    wget \
+ && rm -rf /var/lib/apt/lists/*
+
+RUN wget -O cmake.tar.gz -q ${FILAMENT_URL} \
+ && mkdir cmake \
+ && tar -zxf cmake.tar.gz -C cmake --strip-components=1
+ENV PATH=/cmake/bin:${PATH}
+RUN ls -alh cmake
+RUN cmake --version && which cmake
+
+RUN apt-get update && apt-get install -y \
+    clang-7  \
+    libglu1-mesa-dev \
+    libc++-7-dev \
+    libc++abi-7-dev \
+    ninja-build \
+    libxi-dev \
+ && rm -rf /var/lib/apt/lists/*
+
+RUN wget -O filament.tar.gz -q ${FILAMENT_URL} \
+ && mkdir filament \
+ && tar -zxf filament.tar.gz -C filament --strip-components=1
+
+# Build flags shall be consistent with filament_builde.cmake
+WORKDIR /filament
+RUN mkdir build_dir \
+ && cd build_dir \
+ && cmake \
+        -DCMAKE_C_COMPILER=clang-7 \
+        -DCMAKE_CXX_COMPILER=clang++-7 \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_CXX_FLAGS="-fno-builtin" \
+        -DFILAMENT_ENABLE_JAVA=OFF \
+        -DCMAKE_INSTALL_PREFIX=/filament_install \
+        -DUSE_STATIC_LIBCXX=ON \
+        -DFILAMENT_SKIP_SAMPLES=ON \
+        -DFILAMENT_OPENGL_HANDLE_ARENA_SIZE_IN_MB=20 \
+        -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
+        .. \
+ && make -j$(nproc) \
+ && make install
+
