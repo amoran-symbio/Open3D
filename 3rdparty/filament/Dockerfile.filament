@@ -44,7 +44,7 @@ RUN mkdir build_dir \
         -DCMAKE_C_COMPILER=clang-7 \
         -DCMAKE_CXX_COMPILER=clang++-7 \
         -DCMAKE_BUILD_TYPE=Release \
-        -DCMAKE_CXX_FLAGS="-fno-builtin" \
+        -DCMAKE_CXX_FLAGS="-stdlib=libc++ -fno-builtin" \
         -DFILAMENT_ENABLE_JAVA=OFF \
         -DCMAKE_INSTALL_PREFIX=/filament \
         -DUSE_STATIC_LIBCXX=ON \
