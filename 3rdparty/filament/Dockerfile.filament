@@ -44,7 +44,7 @@ RUN mkdir build_dir \
         -DCMAKE_C_COMPILER=clang-7 \
         -DCMAKE_CXX_COMPILER=clang++-7 \
         -DCMAKE_BUILD_TYPE=Release \
-        -DCMAKE_CXX_FLAGS="-stdlib=libc++ -fno-builtin" \
+        -DCMAKE_CXX_FLAGS="-fno-builtin" \
         -DFILAMENT_ENABLE_JAVA=OFF \
         -DCMAKE_INSTALL_PREFIX=/filament \
         -DUSE_STATIC_LIBCXX=ON \
@@ -53,7 +53,7 @@ RUN mkdir build_dir \
         -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
         .. \
  && make -j$(nproc) \
- && make install
+ && make install -j$(nproc)
 
 WORKDIR /
 RUN tar -czf /${FILAMENT_TAR} filament
