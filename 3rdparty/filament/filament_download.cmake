@@ -27,6 +27,9 @@ else()
     else() # Linux
         set(FILAMENT_URL https://github.com/isl-org/open3d_downloads/releases/download/filament/filament-v1.15.1-linux.tgz)
         set(FILAMENT_SHA256 5e77765885ff22a9528cdd8ac262d53c7b2e9f7a3381f7b39ee7bf8b6ef76e9b)
+        set(FILAMENT_URL /home/yixing/repo/Open3D/3rdparty/filament/filament-fcd2930eb75924bbb7afbe990de9782af4b5d1dc-linux-amd64.tar.gz)
+        set(FILAMENT_SHA256 ec7bb47366d2f381f4b108e9e48226aaf53b6f9f157c4ae21323de5a7828b651) # -stdlib=libc++ -fno-builtin
+        set(FILAMENT_SHA256 cfe63fd142a5744be1da2902f875cef6168b122ebaa9f297924539c1fed9e83e) # -fno-builtin
         string(APPEND lib_dir /x86_64)
     endif()
 
