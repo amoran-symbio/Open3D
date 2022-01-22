@@ -25,19 +25,19 @@ RUN apt-get update && apt-get install -y \
     libegl1-mesa-dev \
  && rm -rf /var/lib/apt/lists/*
 
-RUN wget -O cmake.tar.gz -q ${CMAKE_URL} \
- && mkdir cmake \
- && tar -zxf cmake.tar.gz -C cmake --strip-components=1 \
- && rm -rf cmake.tar.gz
-ENV PATH=/cmake/bin:${PATH}
+RUN wget -O cmake_src.tar.gz -q ${CMAKE_URL} \
+ && mkdir cmake_src \
+ && tar -zxf cmake_src.tar.gz -C cmake_src --strip-components=1 \
+ && rm -rf cmake_src.tar.gz
+ENV PATH=/cmake_src/bin:${PATH}
 
-RUN wget -O filament.tar.gz -q ${FILAMENT_URL} \
- && mkdir filament \
- && tar -zxf filament.tar.gz -C filament --strip-components=1 \
- && rm -rf filament.tar.gz
+RUN wget -O filament_src.tar.gz -q ${FILAMENT_URL} \
+ && mkdir filament_src \
+ && tar -zxf filament_src.tar.gz -C filament_src --strip-components=1 \
+ && rm -rf filament_src.tar.gz
 
 # Build flags shall be consistent with filament_build.cmake
-WORKDIR /filament
+WORKDIR /filament_src
 RUN mkdir build_dir \
  && cd build_dir \
  && cmake \
@@ -46,7 +46,7 @@ RUN mkdir build_dir \
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_CXX_FLAGS="-fno-builtin" \
         -DFILAMENT_ENABLE_JAVA=OFF \
-        -DCMAKE_INSTALL_PREFIX=/filament_install \
+        -DCMAKE_INSTALL_PREFIX=/filament \
         -DUSE_STATIC_LIBCXX=ON \
         -DFILAMENT_SKIP_SAMPLES=ON \
         -DFILAMENT_OPENGL_HANDLE_ARENA_SIZE_IN_MB=20 \
@@ -55,4 +55,5 @@ RUN mkdir build_dir \
  && make -j$(nproc) \
  && make install
 
-RUN tar -czf /${FILAMENT_TAR} filament_install
+WORKDIR /
+RUN tar -czf /${FILAMENT_TAR} filament
