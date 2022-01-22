@@ -31,6 +31,7 @@ else()
         set(FILAMENT_SHA256 cfe63fd142a5744be1da2902f875cef6168b122ebaa9f297924539c1fed9e83e) # -fno-builtin
         set(FILAMENT_SHA256 ec7bb47366d2f381f4b108e9e48226aaf53b6f9f157c4ae21323de5a7828b651) # -stdlib=libc++ -fno-builtin
         set(FILAMENT_SHA256 57b012923aab5c893a038797726fab11ae3c06ae9d21058207e24417ab4d78c5) # -stdlib=libc++ -fno-builtin -fno-fast-math
+        set(FILAMENT_SHA256 2cc298ef4c96e31a7113712f8c4710086282ee1709da564f7f0dc0634f972a04) # debug build with -fno-builtin
         string(APPEND lib_dir /x86_64)
     endif()
 
